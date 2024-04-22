@@ -13,8 +13,14 @@ services:
     depends_on:
       - php
 
+  redis:
+    build:
+      context: ./redis/develop
+
   php:
     build:
       context: ./php/develop
     volumes:
       - ..:/var/www/html
+    depends_on:
+      - redis
