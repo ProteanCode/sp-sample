@@ -12,6 +12,8 @@ services:
       - ./nginx/develop/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - php
+    networks:
+      - frontend
 
   redis:
     build:
@@ -24,3 +26,26 @@ services:
       - ..:/var/www/html
     depends_on:
       - redis
+      - mysql
+    networks:
+      - frontend
+      - backend
+
+  mysql:
+    image: mysql:8.3.0
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_USER: stockpress
+      MYSQL_PASSWORD: stockpress
+      MYSQL_DATABASE: stockpress
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  mysql-data:
