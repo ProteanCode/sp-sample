@@ -45,6 +45,18 @@ services:
     networks:
       - backend
 
+  mysql-test:
+    image: mysql:8.3.0
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_USER: stockpress-test
+      MYSQL_PASSWORD: stockpress-test
+      MYSQL_DATABASE: stockpress-test
+    networks:
+      - backend
+    tmpfs:
+      - /var/lib/mysql
+
 networks:
   frontend:
   backend:

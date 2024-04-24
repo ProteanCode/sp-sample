@@ -4,7 +4,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
 RUN apk add --no-cache libzip-dev jpeg-dev libpng libpng-dev libjpeg-turbo-dev freetype-dev libwebp-dev zlib-dev libxpm-dev icu-dev unzip imagemagick-dev tiff-dev
 
 RUN docker-php-ext-configure gd --with-webp --with-jpeg --with-freetype \
-    && docker-php-ext-install -j$(nproc) gd mysqli pdo pdo_mysql zip opcache;
+    && docker-php-ext-install -j$(nproc) gd mysqli pdo pdo_mysql zip opcache exif;
 
 RUN pecl install imagick && docker-php-ext-enable imagick
 RUN pecl install pcov && docker-php-ext-enable pcov

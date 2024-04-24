@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
 
-            $table->text('filename');
-            $table->text('dir');
+            $table->string('filename', 128);
+            $table->string('hash', 128)->unique();
+            $table->string('disk', 16);
+            $table->text('path');
+            $table->string('extension', 8);
             $table->integer('width');
             $table->integer('height');
             $table->integer('size_in_bytes');

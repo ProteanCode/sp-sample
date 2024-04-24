@@ -11,17 +11,6 @@ class RelationsTest extends TestCase
 {
     use DatabaseTransactions;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Each test has a boilerplate of fake data, it could
-        // be seeded if separate database for testing would
-        // be created and RefreshDatabase trait would be used
-        Image::factory()->createMany(20);
-        Author::factory()->createMany(40);
-    }
-
     public function test_image_may_have_many_authors(): void
     {
         // Given

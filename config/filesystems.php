@@ -29,6 +29,12 @@ return [
     */
 
     'disks' => [
+        'testing' => [
+            'driver' => 'local',
+            'root' => storage_path('app/testing'),
+            'visibility' => 'public',
+            'throw' => false,
+        ],
 
         'local' => [
             'driver' => 'local',

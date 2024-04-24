@@ -10,7 +10,6 @@ class Author extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['*'];
     protected $guarded = [];
 
     public function images(): BelongsToMany
