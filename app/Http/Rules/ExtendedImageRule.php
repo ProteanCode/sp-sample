@@ -2,7 +2,7 @@
 
 namespace App\Http\Rules;
 
-use App\Factories\ImageCreatorFactory;
+use App\Http\Requests\ImageRequest;
 use GuzzleHttp\Psr7\MimeType;
 use Illuminate\Validation\Rules\ImageFile;
 
@@ -19,7 +19,7 @@ class ExtendedImageRule extends ImageFile
     private function registerMimetypesRule(): void
     {
         $validMimetypes = array_values(array_unique(array_map(fn(string $extension) => MimeType::fromExtension($extension),
-            array_values(ImageCreatorFactory::VALID_EXTENSIONS)
+            array_values(ImageRequest::VALID_EXTENSIONS)
         )));
 
         $this->rules('mimetypes:' . join(',', $validMimetypes));

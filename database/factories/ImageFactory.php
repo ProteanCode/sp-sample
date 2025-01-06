@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Http\Requests\StoreImageRequest;
+use App\Http\Requests\ImageRequest\StoreImageRequest;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

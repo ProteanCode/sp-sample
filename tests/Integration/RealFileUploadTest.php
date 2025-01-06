@@ -4,16 +4,17 @@ namespace Tests\Integration;
 
 use App\Models\Image;
 use App\Repositories\LocalImageRepository;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Mockery\MockInterface;
+use RuntimeException;
 use Tests\TestCase;
+use Tests\Traits\DatabaseMigrationsWithSeed;
 
 class RealFileUploadTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrationsWithSeed;
 
     protected function tearDownTheTestEnvironment(): void
     {
@@ -30,7 +31,7 @@ class RealFileUploadTest extends TestCase
         $scaleDownMockFor128Thumbnail = Mockery::mock((new LocalImageRepository()), function (MockInterface $mock) {
             $mock->shouldReceive('scaleDown')
                 ->withArgs(fn(...$args) => $args[2] === 128)
-                ->andReturnUsing(fn() => throw new \RuntimeException("Rollback mock"))->once();
+                ->andReturnUsing(fn() => throw new RuntimeException("Rollback mock"))->once();
         })->makePartial();
 
         $this->instance(LocalImageRepository::class, $scaleDownMockFor128Thumbnail);
@@ -54,13 +55,7 @@ class RealFileUploadTest extends TestCase
         // Then
         $response->assertStatus(400);
 
-        $latestParent = Image::query()
-            ->whereNull('image_id')
-            ->orderBy('id', 'desc')
-            ->limit(1)
-            ->firstOrFail();
-
-        $this->assertDirectoryDoesNotExist(Storage::disk()->path('/images/' . $latestParent->getKey()));
+        $this->assertEquals(0, Image::query()->count());
     }
 
     /**

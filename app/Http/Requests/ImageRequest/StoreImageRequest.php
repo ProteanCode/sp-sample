@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\ImageRequest;
 
-use App\Factories\ImageCreatorFactory;
+use App\Http\Requests\ImageRequest;
 use App\Http\Rules\ExtendedImageRule;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 
-class StoreImageRequest extends FormRequest
+class StoreImageRequest extends ImageRequest
 {
-    const MIN_IMAGE_WIDTH = 500;
-    const MIN_IMAGE_HEIGHT = 500;
-    const MAX_SIZE_IN_BYTES = 5 * 1024 * 1024;
-    const MAX_SIZE_IN_KILOBYTES = self::MAX_SIZE_IN_BYTES / 1024;
+    public function authorize(): bool
+    {
+        return auth()->check();
+    }
 
     public function getImageFile(): UploadedFile
     {
@@ -26,7 +25,7 @@ class StoreImageRequest extends FormRequest
             'file' => [
                 'required',
                 (new ExtendedImageRule())
-                    ->extensions(ImageCreatorFactory::VALID_EXTENSIONS)
+                    ->extensions(self::VALID_EXTENSIONS)
                     ->max(self::MAX_SIZE_IN_KILOBYTES)
                     ->dimensions(Rule::dimensions()
                         ->minWidth(self::MIN_IMAGE_WIDTH)

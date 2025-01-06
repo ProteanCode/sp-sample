@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreImageRequest;
+use App\Http\Requests\ImageRequest\StoreImageRequest;
 use App\Services\AuthorImageService;
 use App\Services\AuthorService;
 use App\Services\ImageService;

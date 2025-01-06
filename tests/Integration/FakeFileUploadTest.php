@@ -2,8 +2,8 @@
 
 namespace Tests\Integration;
 
-use App\Factories\ImageCreatorFactory;
-use App\Http\Requests\StoreImageRequest;
+use App\Http\Requests\ImageRequest;
+use App\Http\Requests\ImageRequest\StoreImageRequest;
 use App\Models\Image;
 use GuzzleHttp\Psr7\MimeType;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -191,13 +191,13 @@ class FakeFileUploadTest extends TestCase
     public static function validExtensionProvider(): array
     {
         return [
-            [ImageCreatorFactory::EXT_JPG],
-            [ImageCreatorFactory::EXT_JPEG],
-            [ImageCreatorFactory::EXT_PNG],
-            [ImageCreatorFactory::EXT_TIF],
-            [ImageCreatorFactory::EXT_TIFF],
-            [ImageCreatorFactory::EXT_WEBP],
-            [ImageCreatorFactory::EXT_BMP],
+            [ImageRequest::EXT_JPG],
+            [ImageRequest::EXT_JPEG],
+            [ImageRequest::EXT_PNG],
+            [ImageRequest::EXT_TIF],
+            [ImageRequest::EXT_TIFF],
+            [ImageRequest::EXT_WEBP],
+            [ImageRequest::EXT_BMP],
         ];
     }
 
