@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Repositories\LocalImageRepository;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\Sanctum;
 use Mockery;
 use Mockery\MockInterface;
 use RuntimeException;
@@ -28,6 +29,8 @@ class RealFileUploadTest extends TestCase
      */
     public function test_that_real_file_rollbacks_successfully(string $filename)
     {
+        Sanctum::actingAs($this->getUser());
+
         $scaleDownMockFor128Thumbnail = Mockery::mock((new LocalImageRepository()), function (MockInterface $mock) {
             $mock->shouldReceive('scaleDown')
                 ->withArgs(fn(...$args) => $args[2] === 128)
@@ -65,6 +68,8 @@ class RealFileUploadTest extends TestCase
      */
     public function test_that_real_file_uploads_successfully(string $filename)
     {
+        Sanctum::actingAs($this->getUser());
+
         // Given
         $filepath = base_path('/tests/Files/' . $filename);
         $uploadedFile = UploadedFile::fake()->createWithContent($filename, file_get_contents($filepath));

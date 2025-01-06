@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
 
     private function runTestSeeders(): void
     {
-        $this->call(ImageAuthorsSeeder::class);
+
     }
 }

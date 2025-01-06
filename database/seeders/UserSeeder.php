@@ -22,13 +22,19 @@ class UserSeeder extends Seeder
             'email' => 'contact@protean.pl'
         ]);
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $tokens[] = $user->createToken('default');
         }
 
-        echo "User / token".PHP_EOL;
-        foreach($users as $index => $user) {
-            echo $user->id.' | '.$user->email.' | '.$tokens[$index]->plainTextToken;
+        $rows = [];
+        foreach ($users as $index => $user) {
+            $rows[] = [
+                $user->id, $user->email, $tokens[$index]->plainTextToken
+            ];
         }
+
+        $this->command->table([
+            "ID", "Email", "Token"
+        ], $rows);
     }
 }

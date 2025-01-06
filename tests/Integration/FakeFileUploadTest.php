@@ -8,6 +8,7 @@ use App\Models\Image;
 use GuzzleHttp\Psr7\MimeType;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class FakeFileUploadTest extends TestCase
@@ -17,6 +18,7 @@ class FakeFileUploadTest extends TestCase
     public function test_that_owner_data_has_to_be_present(): void
     {
         // Given
+        Sanctum::actingAs($this->getUser());
         $fakeImage = Image::factory()->makeOne();
         $file = UploadedFile::fake()->image($fakeImage->filename . '.' . $fakeImage->extension, 600, 800);
 
@@ -36,6 +38,7 @@ class FakeFileUploadTest extends TestCase
     public function test_that_file_upload_with_fishy_mimetype_fails(): void
     {
         // Given
+        Sanctum::actingAs($this->getUser());
         $validExtensionImage = Image::factory()->makeOne();
         $fishyMimetype = MimeType::fromFilename('not_a_virus.exe');
         $invalidMimetypeFile = UploadedFile::fake()->image(
@@ -62,6 +65,7 @@ class FakeFileUploadTest extends TestCase
     public function test_that_file_upload_with_exact_fit_size_is_successful(): void
     {
         // Given
+        Sanctum::actingAs($this->getUser());
         $fakeImage = Image::factory()->makeOne();
         $file = UploadedFile::fake()->image(
             $fakeImage->filename . '.' . $fakeImage->extension, 600, 800
@@ -86,6 +90,7 @@ class FakeFileUploadTest extends TestCase
     public function test_that_file_upload_with_exceeded_size_fails(): void
     {
         // Given
+        Sanctum::actingAs($this->getUser());
         $fakeImage = Image::factory()->makeOne();
         $file = UploadedFile::fake()->image(
             $fakeImage->filename . '.' . $fakeImage->extension
@@ -111,6 +116,7 @@ class FakeFileUploadTest extends TestCase
     public function test_that_file_upload_with_exceeded_dimensions_fails(): void
     {
         // Given
+        Sanctum::actingAs($this->getUser());
         $fakeImage = Image::factory()->tooSmall()->makeOne();
         $file = UploadedFile::fake()->image(
             $fakeImage->filename . '.' . $fakeImage->extension,
@@ -142,6 +148,7 @@ class FakeFileUploadTest extends TestCase
     public function test_that_file_upload_with_invalid_extension_fails(string $invalidExtension): void
     {
         // Given
+        Sanctum::actingAs($this->getUser());
         $fakeImage = Image::factory()->makeOne(['extension' => $invalidExtension]);
         $file = UploadedFile::fake()->image($fakeImage->filename . '.' . $fakeImage->extension, 600, 800);
 
@@ -169,6 +176,7 @@ class FakeFileUploadTest extends TestCase
     public function test_that_file_uploads_successfully(string $validExtension): void
     {
         // Given
+        Sanctum::actingAs($this->getUser());
         $fakeImage = Image::factory()->makeOne(['extension' => $validExtension]);
         $file = UploadedFile::fake()->image($fakeImage->filename . '.' . $fakeImage->extension, 600, 800);
 
