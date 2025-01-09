@@ -4,8 +4,10 @@ namespace App\Http\Requests\ImageRequest;
 
 use App\Http\Requests\ImageRequest;
 use App\Http\Rules\ExtendedImageRule;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class StoreImageRequest extends ImageRequest
 {
@@ -30,11 +32,10 @@ class StoreImageRequest extends ImageRequest
                     ->dimensions(Rule::dimensions()
                         ->minWidth(self::MIN_IMAGE_WIDTH)
                         ->minWidth(self::MIN_IMAGE_HEIGHT)
-                    ),
+                    )
             ],
-            'data.name' => ['required', 'string'],
-            'data.owner.name' => ['required', 'string'],
-            'data.owner.email' => ['required', 'email'],
+            'name' => ['required', 'string'],
+            'surname' => ['required', 'string'],
         ];
     }
 }

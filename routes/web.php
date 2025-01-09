@@ -13,6 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\ImagesController::class, 'create'])->name('first-page');
+Route::get('/list', [\App\Http\Controllers\ImagesController::class, 'index'])->name('second-page');

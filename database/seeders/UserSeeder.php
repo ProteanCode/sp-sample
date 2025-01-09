@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
         }
 
         $this->command->table([
-            "ID", "Email", "Token"
+            "ID", "Email", "Bearer Token"
         ], $rows);
     }
 }

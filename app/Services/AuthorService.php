@@ -6,17 +6,17 @@ use App\Models\Author;
 
 class AuthorService
 {
-    public function getOrCreate(string $name, string $email): Author
+    public function getOrCreate(string $name, string $surname): Author
     {
         $author = Author::query()
             ->where('name', $name)
-            ->where('email', $email)
+            ->where('surname', $surname)
             ->first();
 
         if (!$author) {
             return Author::query()->create([
                 'name' => $name,
-                'email' => $email
+                'surname' => $surname
             ]);
         }
 

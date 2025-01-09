@@ -37,9 +37,9 @@ services:
       - "8306:3306"
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: true
-      MYSQL_USER: stockpress
-      MYSQL_PASSWORD: stockpress
-      MYSQL_DATABASE: stockpress
+      MYSQL_USER: imagegal
+      MYSQL_PASSWORD: imagegal
+      MYSQL_DATABASE: imagegal
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -49,9 +49,9 @@ services:
     image: mysql:8.3.0
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: true
-      MYSQL_USER: stockpress-test
-      MYSQL_PASSWORD: stockpress-test
-      MYSQL_DATABASE: stockpress-test
+      MYSQL_USER: imagegal-test
+      MYSQL_PASSWORD: imagegal-test
+      MYSQL_DATABASE: imagegal-test
     networks:
       - backend
     tmpfs:

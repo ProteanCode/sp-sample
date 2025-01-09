@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Image;
 use App\Repositories\LocalImageRepository;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 use RuntimeException;
@@ -16,13 +17,18 @@ class ImageService
 
     }
 
+    public function listAll(): LengthAwarePaginator
+    {
+        return $this->imageRepository->getPaginator();
+    }
+
     public function create(UploadedFile $uploadedFile): Image
     {
         [$width, $height] = $this->imageRepository->getImageDimensions($uploadedFile->getRealPath());
 
-        $parent = $this->createImageInDatabase($uploadedFile, $width, $height);
+        $parent = $this->createImageInDatabase($uploadedFile);
 
-        $file = $this->imageRepository->saveUploadedFile($uploadedFile, $parent->getKey());
+        $file = $this->imageRepository->saveUploadedFile($uploadedFile, $parent->getKey(), $parent->hash);
 
         if (!$file) {
             throw new RuntimeException("Failed to save uploaded file: " . $uploadedFile->getRealPath());
@@ -41,7 +47,7 @@ class ImageService
                 $width
             );
 
-            $this->createImageInDatabase($uploadedFile, $width, $height, $parent, $relativePath);
+            $this->createImageInDatabase($uploadedFile, $parent, $relativePath);
         }
 
         return $parent;
@@ -62,8 +68,6 @@ class ImageService
 
     protected function createImageInDatabase(
         UploadedFile $uploadedFile,
-        int          $width,
-        int          $height,
         Image        $parent = null,
         string       $thumbnailPath = null
     ): Image
@@ -72,6 +76,10 @@ class ImageService
             throw new InvalidArgumentException("Thumbnail path is required when creating child image");
         }
 
+        $path = $thumbnailPath ? $this->imageRepository->getFullPath($thumbnailPath) : $uploadedFile->getRealPath();
+
+        [$height, $width] = $this->imageRepository->getImageDimensions($path);
+
         $data = [
             'disk' => $this->imageRepository->getDiskName(),
             'filename' => $uploadedFile->getClientOriginalName(),
@@ -79,7 +87,7 @@ class ImageService
             'path' => '/images',
             'width' => $width,
             'height' => $height,
-            'size_in_bytes' => $uploadedFile->getSize(),
+            'size_in_bytes' => filesize($path),
         ];
 
         if ($parent) {

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('filename', 128);
-            $table->string('hash', 128)->unique();
+            $table->string('hash', 128);
             $table->string('disk', 16);
             $table->text('path');
             $table->string('extension', 8);
